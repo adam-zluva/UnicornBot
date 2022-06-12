@@ -5,19 +5,29 @@ namespace Unicorn.Commands
 {
     public class BasicModule : ModuleBase<SocketCommandContext>
     {
-        private readonly DatabaseService databaseService;
+        private readonly EmoteService emojiService;
 
-        public BasicModule(DatabaseService databaseService)
+        public BasicModule(EmoteService emojiService)
         {
-            this.databaseService = databaseService;
+            this.emojiService = emojiService;
         }
 
-        [Command("hello")]
+        [Command("say")]
         [Summary("Repeats a message")]
         public Task SayAsync([Remainder][Summary("The text to repeat")] string text)
         {
-            string emoji = "";
+            var emoji = emojiService.emotes["unicornHappy"];
             string replyText = $"{emoji} {text}";
+            return ReplyAsync(replyText, messageReference: Context.Message.GetReference());
+        }
+
+        [Command("joke")]
+        [Summary("Tells a joke")]
+        public Task JokeAsync()
+        {
+            var emoji = emojiService.emotes["unicornGrin"];
+            string joke = "Youre mom";
+            string replyText = $"{emoji} {joke}";
             return ReplyAsync(replyText, messageReference: Context.Message.GetReference());
         }
     }

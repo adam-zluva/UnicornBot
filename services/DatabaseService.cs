@@ -9,12 +9,12 @@ namespace Unicorn.Services
         public DatabaseService(string dataPath, string saveDataPath)
         {
             string jsonServerData = File.ReadAllText(dataPath);
-            this.serverData = JsonConvert.DeserializeObject<ServerData>(jsonServerData)!; // NOTE: Not ideal ツ
+            this.serverData = JsonConvert.DeserializeObject<ServerData>(jsonServerData)!;
         }
     }
 
     public class ServerData
     {
-        public Dictionary<string, string> emojiData;
+        public Dictionary<string, string> emotesData;
     }
 }

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "UnicornBot": {
+      "commandName": "Project",
+      "workingDirectory": "$(ProjectDir)"
+    }
+  }
+}

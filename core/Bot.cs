@@ -50,6 +50,7 @@ namespace Unicorn.Core
         {
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton(databaseService);
+            serviceCollection.AddSingleton<EmoteService>();
             return serviceCollection.BuildServiceProvider();
         }
     }
