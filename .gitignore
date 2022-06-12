@@ -1,3 +1,5 @@
 secret/
 data/
 bin/
+obj/
+.vs/
