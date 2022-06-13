@@ -13,8 +13,13 @@ namespace Unicorn.Services
         }
     }
 
+    // The JSON file must have the same structure as this class
+    // JSON objects get deserialized as Dictionaries
     public class ServerData
     {
+        public Dictionary<string, string> botMessages;
+        public string[] botPrefixes;
         public Dictionary<string, string> emotesData;
+        public ulong systemChannelID;
     }
 }

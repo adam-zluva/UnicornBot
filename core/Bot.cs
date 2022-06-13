@@ -15,6 +15,7 @@ namespace Unicorn.Core
         // Services
         private readonly CommandHandler commandHandler;
         private readonly DatabaseService databaseService;
+        private readonly EmoteService emoteService;
 
         private const string SERVER_DATA_PATH = "./data/test_server_data.json";
         private const string SAVE_DATA_PATH = "./data/saved_data.json";
@@ -25,12 +26,18 @@ namespace Unicorn.Core
 
             this.client = new DiscordSocketClient();
             this.client.Log += Log;
+            this.client.Ready += Ready;
+
+            var commandService = new CommandService();
+            commandService.Log += Log;
 
             this.databaseService = new DatabaseService(SERVER_DATA_PATH, SAVE_DATA_PATH);
-            this.commandHandler = new CommandHandler(this.client, new CommandService(), BuildServiceProvider());
+            this.emoteService = new EmoteService(databaseService);
+            this.commandHandler = new CommandHandler(this.client, commandService,
+                BuildServiceProvider(), databaseService.serverData.botPrefixes);
         }
 
-        public async Task MainAsync()
+        public async Task BootAsync()
         {
             await client.LoginAsync(TokenType.Bot, token);
             await client.StartAsync();
@@ -42,15 +49,39 @@ namespace Unicorn.Core
 
         private Task Log(LogMessage msg)
         {
+            if (msg.Exception is CommandException exc)
+            {
+                var emote = emoteService.emotes["unicornSad"];
+                string text = $"Oh no! An error occured {emote}";
+                exc.Context.Channel.SendMessageAsync(text);
+            }
+
             Console.WriteLine(msg.ToString());
             return Task.CompletedTask;
+        }
+
+        private async Task Ready()
+        {
+            string prefixes = string.Join(",", databaseService.serverData.botPrefixes);
+            await client.SetGameAsync(prefixes);
+
+            foreach (var guild in client.Guilds)
+            {
+                var systemChannel = guild.GetTextChannel(databaseService.serverData.systemChannelID);
+                if (systemChannel != null)
+                {
+                    string text = $"{databaseService.serverData.botMessages["helloWorldMessage"]}";
+                    await systemChannel.SendMessageAsync(text);
+                    break;
+                }
+            }
         }
 
         public IServiceProvider BuildServiceProvider()
         {
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton(databaseService);
-            serviceCollection.AddSingleton<EmoteService>();
+            serviceCollection.AddSingleton(emoteService);
             return serviceCollection.BuildServiceProvider();
         }
     }

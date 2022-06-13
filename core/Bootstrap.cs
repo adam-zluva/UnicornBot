@@ -9,7 +9,7 @@ namespace Unicorn.Core
             string token = File.ReadAllText(TOKEN_PATH);
 
             Bot bot = new Bot(token);
-            return bot.MainAsync();
+            return bot.BootAsync();
         }
     }
 }

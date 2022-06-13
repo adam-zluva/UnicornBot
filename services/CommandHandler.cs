@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Discord.WebSocket;
 using Discord.Commands;
@@ -9,14 +10,15 @@ namespace Unicorn.Services
         private readonly DiscordSocketClient client;
         private readonly CommandService commands;
         private readonly IServiceProvider services;
-        private readonly char prefix;
+        private readonly string[] prefixes;
 
-        public CommandHandler(DiscordSocketClient client, CommandService commands, IServiceProvider services)
+        public CommandHandler(DiscordSocketClient client, CommandService commands, IServiceProvider services,
+            string[] prefixes)
         {
             this.client = client;
             this.commands = commands;
             this.services = services;
-            this.prefix = '>';
+            this.prefixes = prefixes;
         }
 
         public async Task InstallCommandsAsync()
@@ -35,10 +37,13 @@ namespace Unicorn.Services
 
             int argPos = 0;
 
-            if (!(message.HasCharPrefix(prefix, ref argPos) ||
-                message.HasMentionPrefix(client.CurrentUser, ref argPos)) ||
-                message.Author.IsBot)
-                return;
+            bool hasPrefix = false;
+            foreach (var prefix in prefixes)
+            {
+                if (message.HasStringPrefix(prefix, ref argPos)) hasPrefix = true;
+            }
+
+            if (!hasPrefix || message.Author.IsBot) return;
 
             var context = new SocketCommandContext(client, message);
 
