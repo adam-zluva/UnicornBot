@@ -19,7 +19,7 @@ namespace Unicorn.Services
     {
         public Dictionary<string, string> botMessages;
         public string[] botPrefixes;
-        public Dictionary<string, string> emotesData;
+        public string[] emotes;
         public ulong systemChannelID;
     }
 }

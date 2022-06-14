@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Discord;
 
 namespace Unicorn.Services
@@ -12,11 +13,12 @@ namespace Unicorn.Services
             this.databaseService = databaseService;
 
             this.emotes = new Dictionary<string, Emote>();
-            var emotesData = this.databaseService.serverData.emotesData;
-            foreach (var emoteData in emotesData)
+            Regex rx = new Regex(@":[a-zA-Z]+:");
+            var emotesUnicode = this.databaseService.serverData.emotes;
+            foreach (var emote in emotesUnicode)
             {
-                string key = emoteData.Key;
-                if (Emote.TryParse(emoteData.Value, out Emote emote))
+                string key = rx.Match(emote).Value.Replace(":", "");
+                if (Emote.TryParse(emote, out Emote result))
                 {
                     emotes.Add(key, emote);
                 }

@@ -8,22 +8,22 @@ namespace Unicorn.Services
     public class CommandHandler
     {
         private readonly DiscordSocketClient client;
-        private readonly CommandService commands;
+        public readonly CommandService commandService;
         private readonly IServiceProvider services;
-        private readonly string[] prefixes;
+        public readonly string[] prefixes;
 
-        public CommandHandler(DiscordSocketClient client, CommandService commands, IServiceProvider services,
+        public CommandHandler(DiscordSocketClient client, CommandService commandService, IServiceProvider services,
             string[] prefixes)
         {
             this.client = client;
-            this.commands = commands;
+            this.commandService = commandService;
             this.services = services;
             this.prefixes = prefixes;
         }
 
         public async Task InstallCommandsAsync()
         {
-            await commands.AddModulesAsync(
+            await commandService.AddModulesAsync(
                 assembly: Assembly.GetEntryAssembly(),
                 services: services);
 
@@ -47,7 +47,7 @@ namespace Unicorn.Services
 
             var context = new SocketCommandContext(client, message);
 
-            await commands.ExecuteAsync(
+            await commandService.ExecuteAsync(
                 context: context,
                 argPos: argPos,
                 services: services

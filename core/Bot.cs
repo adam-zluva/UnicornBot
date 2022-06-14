@@ -13,11 +13,12 @@ namespace Unicorn.Core
         private readonly DiscordSocketClient client;
 
         // Services
+        private readonly CommandService commandService;
         private readonly CommandHandler commandHandler;
         private readonly DatabaseService databaseService;
         private readonly EmoteService emoteService;
 
-        private const string SERVER_DATA_PATH = "./data/test_server_data.json";
+        private const string SERVER_DATA_PATH = "./data/config.json";
         private const string SAVE_DATA_PATH = "./data/saved_data.json";
 
         public Bot(string token)
@@ -28,12 +29,12 @@ namespace Unicorn.Core
             this.client.Log += Log;
             this.client.Ready += Ready;
 
-            var commandService = new CommandService();
-            commandService.Log += Log;
+            this.commandService = new CommandService();
+            this.commandService.Log += Log;
 
             this.databaseService = new DatabaseService(SERVER_DATA_PATH, SAVE_DATA_PATH);
             this.emoteService = new EmoteService(databaseService);
-            this.commandHandler = new CommandHandler(this.client, commandService,
+            this.commandHandler = new CommandHandler(client, commandService,
                 BuildServiceProvider(), databaseService.serverData.botPrefixes);
         }
 

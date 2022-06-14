@@ -18,7 +18,8 @@ namespace Unicorn.Commands
         [Summary("Repeats a message")]
         public Task SayAsync([Remainder][Summary("The text to repeat")] string text)
         {
-            return ReplyAsync(text, messageReference: Context.Message.GetReference());
+            Context.Message.DeleteAsync();
+            return ReplyAsync(text);
         }
 
         [Command("say")]
@@ -34,7 +35,7 @@ namespace Unicorn.Commands
         [Summary("Ballin")]
         public Task DallinAsync()
         {
-            var dallinEmoji = emoteService.emotes["dallin"];
+            var dallinEmoji = emoteService.emotes["Dallin"];
             return ReplyAsync($"{dallinEmoji}⚾ Dallin is ballin.");
         }
     }

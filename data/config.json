@@ -1,0 +1,19 @@
+{
+    "systemChannelID": 819489289082896428,
+    "botMessages": {
+        "helloWorldMessage": "Hello hello snails! I'm here! <:UniHappy:985227158429503569> "
+    },
+    "botPrefixes": [
+        "?",
+        "uni?",
+        "uni? "
+    ],
+    "emotes": [
+        "<:UniHappy:985227158429503569>",
+        "<:UniGrin:985654025246625822>",
+        "<:UniSad:985945442636415056>",
+        "<:UniNeutral:985945434826633307>",
+        "<:UniKawaii:985945425473339406>",
+        "<:Dallin:985921671795970098>"
+    ]
+}
