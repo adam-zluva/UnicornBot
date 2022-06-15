@@ -28,6 +28,7 @@ namespace Unicorn.Services
                 services: services);
 
             client.MessageReceived += HandleCommandAsync;
+            client.ButtonExecuted += HandleButtonRespond;
         }
 
         public async Task HandleCommandAsync(SocketMessage messageContext)
@@ -47,11 +48,34 @@ namespace Unicorn.Services
 
             var context = new SocketCommandContext(client, message);
 
-            await commandService.ExecuteAsync(
+            var result = await commandService.ExecuteAsync(
                 context: context,
                 argPos: argPos,
                 services: services
             );
+
+            if (result.Error != null)
+            {
+                var emoteService = services.GetService<EmoteService>()!;
+                var databaseService = services.GetService<DatabaseService>()!;
+
+                var emote = emoteService.emotes["UniSad"];
+                string text = $"Oh no! Something went wrong {emote} " +
+                    $"{result.ErrorReason}\n";
+                await message.Channel.SendMessageAsync(text);
+            }
+        }
+
+        public async Task HandleButtonRespond(SocketMessageComponent component)
+        {
+            switch (component.Data.CustomId)
+            {
+                case "game":
+                    await component.RespondAsync($"{component.User.Mention} has clicked the buttom.");
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

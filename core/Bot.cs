@@ -30,12 +30,11 @@ namespace Unicorn.Core
             this.client.Ready += Ready;
 
             this.commandService = new CommandService();
-            this.commandService.Log += Log;
 
             this.databaseService = new DatabaseService(SERVER_DATA_PATH, SAVE_DATA_PATH);
             this.emoteService = new EmoteService(databaseService);
             this.commandHandler = new CommandHandler(client, commandService,
-                BuildServiceProvider(), databaseService.serverData.botPrefixes);
+                BuildServiceProvider(), databaseService.config.botPrefixes);
         }
 
         public async Task BootAsync()
@@ -50,28 +49,21 @@ namespace Unicorn.Core
 
         private Task Log(LogMessage msg)
         {
-            if (msg.Exception is CommandException exc)
-            {
-                var emote = emoteService.emotes["unicornSad"];
-                string text = $"Oh no! An error occured {emote}";
-                exc.Context.Channel.SendMessageAsync(text);
-            }
-
             Console.WriteLine(msg.ToString());
             return Task.CompletedTask;
         }
 
         private async Task Ready()
         {
-            string prefixes = string.Join(",", databaseService.serverData.botPrefixes);
+            string prefixes = string.Join(",", databaseService.config.botPrefixes);
             await client.SetGameAsync(prefixes);
 
             foreach (var guild in client.Guilds)
             {
-                var systemChannel = guild.GetTextChannel(databaseService.serverData.systemChannelID);
+                var systemChannel = guild.GetTextChannel(databaseService.config.systemChannelID);
                 if (systemChannel != null)
                 {
-                    string text = $"{databaseService.serverData.botMessages["helloWorldMessage"]}";
+                    string text = $"{databaseService.config.botMessages["helloWorldMessage"]}";
                     await systemChannel.SendMessageAsync(text);
                     break;
                 }

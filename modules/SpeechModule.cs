@@ -15,7 +15,7 @@ namespace Unicorn.Commands
 
         [Command("say")]
         [Alias("s")]
-        [Summary("Repeats a message")]
+        [Summary("%hide%Repeats a message")]
         public Task SayAsync([Remainder][Summary("The text to repeat")] string text)
         {
             Context.Message.DeleteAsync();
@@ -24,7 +24,7 @@ namespace Unicorn.Commands
 
         [Command("say")]
         [Alias("s")]
-        [Summary("Repeats a message in specific channel")]
+        [Summary("%hide%Repeats a message in specific channel")]
         public Task SayAsync([Summary("The channel to repeat the message to")] SocketTextChannel channel,
             [Remainder][Summary("The text to repeat")] string text)
         {
@@ -32,7 +32,7 @@ namespace Unicorn.Commands
         }
 
         [Command("dallin")]
-        [Summary("Ballin")]
+        [Summary("%hide%Ballin")]
         public Task DallinAsync()
         {
             var dallinEmoji = emoteService.emotes["Dallin"];

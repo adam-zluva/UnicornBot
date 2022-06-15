@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using System.Text.RegularExpressions;
+using Discord;
 using Discord.Commands;
 using Unicorn.Services;
 
@@ -7,12 +8,14 @@ namespace Unicorn.Commands
     public class BasicModule : ModuleBase<SocketCommandContext>
     {
         private readonly EmoteService emoteService;
-        private readonly CommandHandler commandHandler;
+        private readonly CommandService commandService;
+        private readonly DatabaseService databaseService;
 
-        public BasicModule(EmoteService emoteService, CommandHandler commandHandler)
+        public BasicModule(EmoteService emoteService, CommandService commandService, DatabaseService databaseService)
         {
             this.emoteService = emoteService;
-            this.commandHandler = commandHandler;
+            this.commandService = commandService;
+            this.databaseService = databaseService;
         }
 
         [Command("help")]
@@ -20,20 +23,27 @@ namespace Unicorn.Commands
         public Task HelpAsync()
         {
             var happyEmote = emoteService.emotes["UniHappy"];
+            var sadEmote = emoteService.emotes["UniSad"];
+
+            string prefix = databaseService.config.botPrefixes[0];
+
+            Regex rx = new Regex(@"^%hide%");
 
             var embed = new EmbedBuilder();
-            embed.WithTitle("Unicorn Dashboard")
+            embed.WithTitle("Unicorn Commands")
                 .WithDescription($"These are all available commands {happyEmote}")
                 .WithAuthor(Context.Client.CurrentUser)
                 .WithColor(Color.Purple);
 
-            List<CommandInfo> commands = commandHandler.commandService.Commands.ToList();
+            List<CommandInfo> commands = commandService.Commands.ToList();
             foreach (var cmdInfo in commands)
             {
-                string title = $"{commandHandler.prefixes[0]}{cmdInfo.Name}";
+                if (rx.IsMatch(cmdInfo.Summary)) continue;
+
+                string title = $"{prefix}{cmdInfo.Name}";
                 string description = $"{cmdInfo.Summary}"
-                    ?? "No description available\n";
-                embed.AddField(cmdInfo.Name, description);
+                    ?? $"No description available {sadEmote}\n";
+                embed.AddField(title, description);
             }
 
             return ReplyAsync(embed: embed.Build());

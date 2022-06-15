@@ -14,7 +14,7 @@ namespace Unicorn.Services
 
             this.emotes = new Dictionary<string, Emote>();
             Regex rx = new Regex(@":[a-zA-Z]+:");
-            var emotesUnicode = this.databaseService.serverData.emotes;
+            var emotesUnicode = this.databaseService.config.emotes;
             foreach (var emote in emotesUnicode)
             {
                 string key = rx.Match(emote).Value.Replace(":", "");

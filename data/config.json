@@ -1,7 +1,8 @@
 {
     "systemChannelID": 819489289082896428,
+    "managerUserID": 401680725356838922,
     "botMessages": {
-        "helloWorldMessage": "Hello hello snails! I'm here! <:UniHappy:985227158429503569> "
+        "helloWorldMessage": "Hello, hello snails! I'm here!"
     },
     "botPrefixes": [
         "?",
