@@ -3,7 +3,7 @@ using Discord;
 using Discord.Commands;
 using Unicorn.Services;
 
-namespace Unicorn.Commands
+namespace Unicorn.Modules
 {
     public class BasicModule : ModuleBase<SocketCommandContext>
     {

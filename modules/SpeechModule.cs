@@ -2,7 +2,7 @@
 using Discord.WebSocket;
 using Discord.Commands;
 
-namespace Unicorn.Commands
+namespace Unicorn.Modules
 {
     public class SpeechModule : ModuleBase<SocketCommandContext>
     {

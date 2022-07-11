@@ -2,6 +2,7 @@
 using Discord;
 using Discord.WebSocket;
 using Discord.Commands;
+using Discord.Interactions;
 using Unicorn.Services;
 
 namespace Unicorn.Core

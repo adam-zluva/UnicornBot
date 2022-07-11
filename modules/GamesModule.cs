@@ -3,7 +3,7 @@ using Discord.WebSocket;
 using Discord.Commands;
 using Discord;
 
-namespace Unicorn.Commands
+namespace Unicorn.Modules
 {
     [Group("play")]
     public class GamesModule : ModuleBase<SocketCommandContext>
@@ -15,14 +15,11 @@ namespace Unicorn.Commands
             this.emoteService = emoteService;
         }
 
-        [Command("find-the-snail")]
+        [Command("find")]
         [Summary("Starts the Find the Snail game")]
         public async Task FindingSnailAsync()
         {
-            var componentBuilder = new ComponentBuilder()
-                .WithButton("Here!", "game");
-
-            await ReplyAsync("Find the snail!", components: componentBuilder.Build());
+            await ReplyAsync("Find the snail!");
         }
     }
 }

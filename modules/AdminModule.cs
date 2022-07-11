@@ -1,6 +1,6 @@
 using Discord.Commands;
 
-namespace Unicorn.Commands
+namespace Unicorn.Modules
 {
     [RequireOwner]
     public class AdminModule : ModuleBase<SocketCommandContext>

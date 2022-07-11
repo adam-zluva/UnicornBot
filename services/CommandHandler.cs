@@ -28,7 +28,6 @@ namespace Unicorn.Services
                 services: services);
 
             client.MessageReceived += HandleCommandAsync;
-            client.ButtonExecuted += HandleButtonRespond;
         }
 
         public async Task HandleCommandAsync(SocketMessage messageContext)
@@ -63,18 +62,6 @@ namespace Unicorn.Services
                 string text = $"Oh no! Something went wrong {emote} " +
                     $"{result.ErrorReason}\n";
                 await message.Channel.SendMessageAsync(text);
-            }
-        }
-
-        public async Task HandleButtonRespond(SocketMessageComponent component)
-        {
-            switch (component.Data.CustomId)
-            {
-                case "game":
-                    await component.RespondAsync($"{component.User.Mention} has clicked the buttom.");
-                    break;
-                default:
-                    break;
             }
         }
     }
